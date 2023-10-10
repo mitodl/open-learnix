@@ -23,6 +23,17 @@ largely a one-time operation unless the dependencies in this project change.
 
 ## Usage
 
+### Cloning projects
+
+Open Learning projects should be cloned into a `repos/` directory in this project. This directory is gitignored to
+guarantee that nested projects don't get committed. For example:
+
+```bash
+mkdir -p repos
+cd repos
+git clone git@github.com:mitodl/mitxpro.git
+```
+
 ### pre-commit
 
 `pre-commit` should generally work out of the box with the standard `pre-commit install`.
