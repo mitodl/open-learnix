@@ -1,0 +1,4 @@
+.cache/
+.direnv/
+repos/
+.pre-commit-config.yaml
