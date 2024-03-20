@@ -21,6 +21,7 @@ services:
         - --spi-theme-static-max-age=-1
         - --spi-theme-cache-themes=false
         - --spi-theme-cache-templates=false
+        - --spi-login-provider=ol-freemarker
       environment:
         KC_DB_VENDOR: POSTGRES
         KC_DB_ADDR: keycloak-db
@@ -38,6 +39,7 @@ services:
         - keycloak-db
       networks:
         - ol-network
+      hostname: keycloak.odl.local
 
 networks:
   ol-network:

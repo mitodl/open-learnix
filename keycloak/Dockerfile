@@ -1,8 +1,8 @@
 FROM maven:3-eclipse-temurin-11 as build-mvn
 
 ADD ./repos/ol-keycloak/ /src/ol-keycloak
-RUN cd /src/ol-keycloak/ol-keycloak/oltheme && mvn clean build
-RUN cd /src/ol-keycloak/ol-keycloak/ol-spi && mvn clean build
+RUN cd /src/ol-keycloak/ol-keycloak/oltheme && mvn clean install
+RUN cd /src/ol-keycloak/ol-keycloak/ol-spi && mvn clean install
 
 FROM gradle:8-jdk17-alpine as build-gradle
 
