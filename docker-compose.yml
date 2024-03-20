@@ -1,0 +1,67 @@
+version: '3.6'
+
+services:
+  keycloak-db:
+    image: postgres:16
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./keycloak/create-keycloak-db.sql:/docker-entrypoint-initdb.d/create-keycloak-db.sql
+    networks:
+      - ol-network
+    environment:
+      POSTGRES_PASSWORD: password
+  keycloak:
+      build:
+        context: .
+        dockerfile: ./keycloak/Dockerfile
+        args:
+          KEYCLOAK_THEME_GIT_REF: ${KEYCLOAK_THEME_GIT_REF:-main}
+      command:
+        - start-dev
+        - --features=preview
+        - --spi-theme-static-max-age=-1
+        - --spi-theme-cache-themes=false
+        - --spi-theme-cache-templates=false
+        - --spi-login-provider=ol-freemarker
+      environment:
+        KC_DB: postgres
+        KC_DB_URL_HOST: keycloak-db
+        KC_DB_URL_PORT: 5432
+        KC_DB_URL_DATABASE: keycloak
+        KC_DB_USERNAME: postgres
+        KC_DB_PASSWORD: password
+        KC_DB_SCHEMA: public
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: password
+      volumes:
+        - ./repos/ol-keycloak/ol-keycloak/oltheme/target/keycloak-theme-ol-1.0-SNAPSHOT.jar:/opt/keycloak/providers/keycloak-theme-ol-1.0-SNAPSHOT.jar
+        - ./repos/ol-keycloak/ol-keycloak/ol-spi/target/ol-spi-1.1-SNAPSHOT.jar:/opt/keycloak/providers/ol-spi-1.1-SNAPSHOT.jar
+      ports:
+        - 8080:8080
+      depends_on:
+        - keycloak-db
+      networks:
+        - ol-network
+      hostname: keycloak.odl.local
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: always
+    volumes:
+      - ./data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - ol-network
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATA_FILE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+networks:
+  ol-network:
+    name: ol-network

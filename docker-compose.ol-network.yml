@@ -1,0 +1,18 @@
+services:
+  nginx:
+    networks:
+      - default
+      - ol-network
+  web:
+    networks:
+      - default
+      - ol-network
+  celery:
+    networks:
+      - default
+      - ol-network
+
+networks:
+  default:
+  ol-network:
+    external: true
