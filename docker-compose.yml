@@ -42,6 +42,23 @@ services:
         - ol-network
       hostname: keycloak.odl.local
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: always
+    volumes:
+      - ./data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - ol-network
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATA_FILE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
 networks:
   ol-network:
     name: ol-network
