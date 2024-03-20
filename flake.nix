@@ -30,7 +30,9 @@
         pkgs = import inputs.nixpkgs {inherit system;};
         unstable = import inputs.nixpkgs-unstable {inherit system;};
       in {
-        devenv.shells.default = {
+        devenv.shells.default = let
+          devenvRoot = config.devenv.shells.default.env.DEVENV_ROOT;
+        in {
           packages = [
             pkgs.git
             pkgs.pre-commit
@@ -45,7 +47,7 @@
           ];
 
           env = {
-            PRE_COMMIT_HOME = "$DEVENV_ROOT/.cache/pre-commit";
+            PRE_COMMIT_HOME = "${devenvRoot}/.cache/pre-commit";
             PIP_NO_BINARY = "ruff";
           };
 
@@ -71,7 +73,7 @@
 
           scripts = {
             ol-dc.exec = ''
-              COMPOSE_FILE=$DEVENV_ROOT/docker-compose.yml docker compose $@
+              COMPOSE_FILE=${devenvRoot}/docker-compose.yml docker compose $@
             '';
           };
         };
