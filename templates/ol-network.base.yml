@@ -1,0 +1,5 @@
+# defines the ol-network as an external one in addition to the default one
+networks:
+  default:
+  ol-network:
+    external: true
