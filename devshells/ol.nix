@@ -14,7 +14,7 @@
           pkgs.git
           pkgs.pre-commit
           pkgs.nodejs
-          pkgs.python3
+          pkgs.python312
           pkgs.poetry
           pkgs.gcc
           pkgs.detect-secrets
@@ -64,7 +64,9 @@
             )'
           '';
           ol-dc.exec = ''
-            COMPOSE_FILE=${devenvRoot}/docker-compose.yml docker compose $@
+            ${builtins.readFile ../bin/ol-stdlib.sh}
+
+            ol_dc_cmd "${devenvRoot}" "$@"
           '';
         };
       };

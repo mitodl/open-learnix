@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+PARENT_DIR=$(dirname $SCRIPT_DIR)
+
+source $SCRIPT_DIR/ol-stdlib.sh
+
+ol_dc_cmd "$PARENT_DIR"
