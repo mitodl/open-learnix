@@ -1,67 +1,37 @@
-version: '3.6'
-
+include: 
+  - docker-compose.keycloak.yml
+  - docker-compose.tools.yml
 services:
-  keycloak-db:
-    image: postgres:16
-    ports:
-      - "15432:5432"
-    volumes:
-      - ./keycloak/create-keycloak-db.sql:/docker-entrypoint-initdb.d/create-keycloak-db.sql
-    networks:
-      - ol-network
-    environment:
-      POSTGRES_PASSWORD: password
-  keycloak:
-      build:
-        context: .
-        dockerfile: ./keycloak/Dockerfile
-        args:
-          KEYCLOAK_THEME_GIT_REF: ${KEYCLOAK_THEME_GIT_REF:-main}
-      command:
-        - start-dev
-        - --features=preview
-        - --spi-theme-static-max-age=-1
-        - --spi-theme-cache-themes=false
-        - --spi-theme-cache-templates=false
-        - --spi-login-provider=ol-freemarker
-      environment:
-        KC_DB: postgres
-        KC_DB_URL_HOST: keycloak-db
-        KC_DB_URL_PORT: 5432
-        KC_DB_URL_DATABASE: keycloak
-        KC_DB_USERNAME: postgres
-        KC_DB_PASSWORD: password
-        KC_DB_SCHEMA: public
-        KEYCLOAK_ADMIN: admin
-        KEYCLOAK_ADMIN_PASSWORD: password
-      volumes:
-        - ./repos/ol-keycloak/ol-keycloak/oltheme/target/keycloak-theme-ol-1.0-SNAPSHOT.jar:/opt/keycloak/providers/keycloak-theme-ol-1.0-SNAPSHOT.jar
-        - ./repos/ol-keycloak/ol-keycloak/ol-spi/target/ol-spi-1.1-SNAPSHOT.jar:/opt/keycloak/providers/ol-spi-1.1-SNAPSHOT.jar
-      ports:
-        - 8080:8080
-      depends_on:
-        - keycloak-db
-      networks:
-        - ol-network
-      hostname: keycloak.odl.local
 
-  mailpit:
-    image: axllent/mailpit
-    container_name: mailpit
+  traefik:
     restart: always
-    volumes:
-      - ./data:/data
+    image: "traefik:v3.2"
+    container_name: "traefik"
     ports:
-      - 8025:8025
-      - 1025:1025
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/certs:ro"
+      - "./config/traefik/traefik.yml:/traefik.yml:ro"
+      - "./config/traefik/dynamic.yml:/dynamic.yml:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http,https"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.odl.local`)"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.service=api@internal"
     networks:
-      - ol-network
-    environment:
-      MP_MAX_MESSAGES: 5000
-      MP_DATA_FILE: /data/mailpit.db
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      ol-network:
+        ipv4_address: 172.44.0.200
 
 networks:
   ol-network:
     name: ol-network
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.44.0.0/16"
+          gateway: "172.44.0.1"
+

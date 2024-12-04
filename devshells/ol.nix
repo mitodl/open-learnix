@@ -18,6 +18,8 @@
           pkgs.poetry
           pkgs.gcc
           pkgs.detect-secrets
+          pkgs.mkcert
+          pkgs.openssl
           # newer versions of ruff require a newer version of rustc/cargo to build
           # these are only available in unstable at this time
           pkgs-unstable.cargo
@@ -27,6 +29,7 @@
         env = {
           PRE_COMMIT_HOME = "${devenvRoot}/.cache/pre-commit";
           PIP_NO_BINARY = "ruff";
+          OL_ROOT = "${devenvRoot}";
         };
 
         pre-commit = {
@@ -69,8 +72,25 @@
             ol_dc_cmd "${devenvRoot}" "$@"
           '';
         };
+
+        enterShell = let
+            certsPath = "${devenvRoot}/certs";
+            certFile = "${certsPath}/odl.local.crt";
+            keyFile = "${certsPath}/odl.local.key";
+            pemFile = "${certsPath}/odl.local.pem";
+        in ''
+          mkcert \
+            --cert-file ${certFile} \
+            --key-file ${keyFile} \
+            "odl.local" \
+            "*.odl.local" \
+            "*.learn.odl.local"
+
+            openssl x509 -in ${certFile} -out ${pemFile} -outform PEM
+        '';
       };
     };
+
 
     treefmt = {
       projectRootFile = "flake.nix";
