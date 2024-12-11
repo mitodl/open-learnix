@@ -3,3 +3,12 @@
 repos/
 data/
 .pre-commit-config.yaml
+
+
+keycloak/providers/*
+!keycloak/providers/.keep
+
+env/*
+!env/*.example.env
+
+certs/

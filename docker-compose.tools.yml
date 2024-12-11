@@ -1,0 +1,54 @@
+services:
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: always
+    volumes:
+      - ./data:/data
+    ports:
+      - 8025
+      - 1025
+    hostname: mail.odl.local
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATA_FILE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mail.rule=Host(`mail.odl.local`)"
+      - "traefik.http.routers.mail.entrypoints=https"
+      - "traefik.http.routers.mail.tls=true"
+      - "traefik.http.services.mail.loadbalancer.server.port=8025"
+    networks:
+      - ol-network
+
+  webhook-tester:
+    image: tarampampam/webhook-tester
+    command: --log-json serve --port 8180 --storage-driver redis --pubsub-driver redis --redis-dsn redis://redis:6379/0
+    ports: 
+      - '8180/tcp'
+    depends_on:
+      redis: {condition: service_healthy}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webhook-tester.rule=Host(`webhook-tester.odl.local`)"
+      - "traefik.http.routers.webhook-tester.entrypoints=https"
+      - "traefik.http.routers.webhook-tester.tls=true"
+      - "traefik.http.services.webhook-tester.loadbalancer.server.port=8180"
+    networks:
+      - ol-network
+
+  redis:
+    image: redis:7-alpine
+    volumes: [redis-data:/data:rw]
+    ports: ['6379/tcp']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 1s
+    networks:
+      - ol-network
+
+volumes:
+  redis-data: {}

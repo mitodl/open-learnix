@@ -1,0 +1,7 @@
+{
+  "default": {
+      "nofollow": true,
+      "newtab": false
+  },
+  "sites": []
+}
