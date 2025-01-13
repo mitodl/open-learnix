@@ -46,6 +46,11 @@ services:
       - "traefik.http.routers.learn-web.tls=true"
       - "traefik.http.services.learn-web.loadbalancer.server.port=8062"
 
+  locust-worker:
+    networks:
+      - default
+      - ol-network
+
 networks:
   default:
   ol-network:

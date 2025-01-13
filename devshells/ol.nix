@@ -26,6 +26,8 @@
           pkgs-unstable.rustc
         ];
 
+        dotenv.disableHint = true;
+
         env = {
           PRE_COMMIT_HOME = "${devenvRoot}/.cache/pre-commit";
           PIP_NO_BINARY = "ruff";

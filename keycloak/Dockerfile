@@ -17,7 +17,7 @@ RUN dnf install --installroot /mnt/rootfs curl --releasever 9 --setopt install_w
     rpm --root /mnt/rootfs -e --nodeps setup
 
 # -------------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:26.0.5
+FROM quay.io/keycloak/keycloak:26.0.6
 COPY --from=ubi-micro-build /mnt/rootfs /
 
 # COPY --from=build-gradle /src/keycloak-scim/build/libs/*.jar /opt/keycloak/providers/
