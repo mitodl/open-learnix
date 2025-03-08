@@ -1,16 +1,9 @@
 services:
   nginx:
     networks:
+      - default
       - ol-network
-    hostname: api.learn.odl.local
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.learn-api.rule=Host(`api.learn.odl.local`)"
-      - "traefik.http.routers.learn-api.entrypoints=https"
-      - "traefik.http.routers.learn-api.tls=true"
-      - "traefik.http.routers.learn-api.service=learn-api"
-      - "traefik.http.services.learn-api.loadbalancer.server.port=8063"
-    
+    hostname: mit-learn-api.internal.odl.local
   web:
     networks:
       - default
@@ -38,6 +31,7 @@ services:
 
   watch:
     networks:
+      - default
       - ol-network
     labels:
       - "traefik.enable=true"

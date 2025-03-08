@@ -4,17 +4,14 @@ services:
     ports:
       - 5432
     volumes:
-      - ./keycloak/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
-      - ./db/:/mnt/db
+      - ./init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+      - ../db/:/mnt/db
     environment:
       POSTGRES_PASSWORD: password
-    networks:
-      - ol-network
 
   keycloak:
     build:
       context: .
-      dockerfile: ./keycloak/Dockerfile
       args:
         KEYCLOAK_THEME_GIT_REF: ${KEYCLOAK_THEME_GIT_REF:-main}
     command:
@@ -43,18 +40,11 @@ services:
       - path: ./env/keycloak.local.env
         required: false
     volumes:
-      - ./repos/ol-keycloak/ol-keycloak/oltheme/target/keycloak-theme-ol-1.0-SNAPSHOT.jar:/opt/keycloak/providers/keycloak-theme-ol-1.0-SNAPSHOT.jar
-      - ./repos/ol-keycloak/ol-keycloak/ol-spi/target/ol-spi-1.1-SNAPSHOT.jar:/opt/keycloak/providers/ol-spi-1.1-SNAPSHOT.jar
+      - ../repos/ol-keycloak/ol-keycloak/oltheme/target/keycloak-theme-ol-1.0-SNAPSHOT.jar:/opt/keycloak/providers/keycloak-theme-ol-1.0-SNAPSHOT.jar
+      - ../repos/ol-keycloak/ol-keycloak/ol-spi/target/ol-spi-1.1-SNAPSHOT.jar:/opt/keycloak/providers/ol-spi-1.1-SNAPSHOT.jar
     ports:
       - "8080"
       - "8443"
-    depends_on:
-      - keycloak-db
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`keycloak.odl.local`)"
-      - "traefik.http.routers.keycloak.entrypoints=https"
-      - "traefik.http.routers.keycloak.tls=true"
     networks:
       ol-network:
         ipv4_address: 172.44.1.10

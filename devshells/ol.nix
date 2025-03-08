@@ -58,16 +58,6 @@
         };
 
         scripts = {
-          ol-generate-network-overrides.exec = ''
-            PROJECT=$1 ${pkgs.yq-go}/bin/yq --null-input '(
-              load("templates/ol-network.base.yml") | .services |= (
-                load("repos/" + strenv(PROJECT) + "/docker-compose.yml")
-                | ... comments=""
-                | .services
-                | map_values({"networks": ["default", "ol-network"]})
-              )
-            )'
-          '';
           ol-dc.exec = ''
             ${builtins.readFile ../bin/ol-stdlib.sh}
 
@@ -86,7 +76,8 @@
             --key-file ${keyFile} \
             "odl.local" \
             "*.odl.local" \
-            "*.learn.odl.local"
+            "*.learn.odl.local" \ 
+            "*.internal.odl.local"
 
             openssl x509 -in ${certFile} -out ${pemFile} -outform PEM
         '';

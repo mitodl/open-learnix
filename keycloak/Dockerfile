@@ -1,12 +1,16 @@
+FROM alpine/git:latest as sources
+WORKDIR /src
+RUN git clone https://github.com/mitodl/ol-keycloak.git
+
 FROM maven:3-eclipse-temurin-21 AS build-mvn
 
-ADD ./repos/ol-keycloak/ /src/ol-keycloak
+COPY --from=sources /src/ol-keycloak /src/ol-keycloak
 RUN cd /src/ol-keycloak/ol-keycloak/oltheme && mvn clean install
 RUN cd /src/ol-keycloak/ol-keycloak/ol-spi && mvn clean install
 
 FROM gradle:8-jdk21-alpine AS build-gradle
 
-ADD ./repos/keycloak-scim/ /src/keycloak-scim
+ADD ../repos/keycloak-scim/ /src/keycloak-scim
 RUN cd /src/keycloak-scim && gradle clean shadowJar
 
 # -------------------------------------------------------------------------
@@ -21,7 +25,7 @@ FROM quay.io/keycloak/keycloak:26.0.6
 COPY --from=ubi-micro-build /mnt/rootfs /
 
 # COPY --from=build-gradle /src/keycloak-scim/build/libs/*.jar /opt/keycloak/providers/
-ADD ./keycloak/providers/*.jar /opt/keycloak/providers/
+ADD ./providers/*.jar /opt/keycloak/providers/
 COPY --from=build-mvn /src/ol-keycloak/ol-keycloak/oltheme/target/*.jar /opt/keycloak/providers/
 COPY --from=build-mvn /src/ol-keycloak/ol-keycloak/ol-spi/target/*.jar /opt/keycloak/providers/
 
