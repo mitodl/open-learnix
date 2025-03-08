@@ -15,7 +15,7 @@ routes:
     name: "passauth"
     desc: "Wildcard route that can use auth but doesn't require it."
     priority: 0
-    upstream_id: 1
+    upstream_id: mit-learn-nginx
     plugins:
       openid-connect:
         client_id: ${{KEYCLOAK_CLIENT_ID}}
@@ -54,7 +54,7 @@ routes:
     name: "reqauth"
     desc: "Routes that require authentication."
     priority: 10
-    upstream_id: 1
+    upstream_id: mit-learn-nginx
     plugins:
       openid-connect:
         client_id: ${{KEYCLOAK_CLIENT_ID}}

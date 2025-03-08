@@ -3,7 +3,7 @@ services:
     networks:
       - default
       - ol-network
-    hostname: mit-learn-api.internal.odl.local
+    hostname: mit-learn-nginx.internal.odl.local
   web:
     networks:
       - default
