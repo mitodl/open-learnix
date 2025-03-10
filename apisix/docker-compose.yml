@@ -9,9 +9,9 @@ services:
       # keycloak auth variables
       - KEYCLOAK_REALM_NAME=${KEYCLOAK_REALM_NAME:-ol-local}
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID:-apisix}
-      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
-      - KEYCLOAK_DISCOVERY_URL=${KEYCLOAK_DISCOVERY_URL:-https://keycloak.ol.local/realms/ol-local/.well-known/openid-configuration}
-      - KEYCLOAK_SCOPES=${KEYCLOAK_SCOPES:-openid,profile,ol-profile}
+      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-HckCZXToXfaetbBx0Fo3xbjnC468oMi4}
+      - KEYCLOAK_DISCOVERY_URL=${KEYCLOAK_DISCOVERY_URL:-http://keycloak.internal.odl.local:8080/realms/ol-local/.well-known/openid-configuration}
+      - KEYCLOAK_SCOPES=${KEYCLOAK_SCOPES:-openid profile ol-profile}
     ports:
       - ${APISIX_PORT:-443}:${APISIX_PORT:-443}
     volumes:
@@ -24,5 +24,10 @@ services:
       - ol-ssl-cert
       - ol-ssl-key
     networks:
-      - ol-network
+      ol-network:
+        aliases:
+          - mail.odl.local
+          - keycloak.odl.local
+          - learn.odl.local
+          - api.odl.local
 

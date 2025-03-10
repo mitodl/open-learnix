@@ -8,8 +8,6 @@ services:
     networks:
       - default
       - ol-network
-    extra_hosts:
-      - keycloak.odl.local:172.44.0.200
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     volumes:
@@ -33,12 +31,7 @@ services:
     networks:
       - default
       - ol-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.learn-web.rule=Host(`learn.odl.local`)"
-      - "traefik.http.routers.learn-web.entrypoints=https"
-      - "traefik.http.routers.learn-web.tls=true"
-      - "traefik.http.services.learn-web.loadbalancer.server.port=8062"
+    hostname: mit-learn-nextjs.internal.odl.local
 
   locust-worker:
     networks:

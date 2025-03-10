@@ -1,14 +1,4 @@
 services:
-  keycloak-db:
-    image: postgres:16
-    ports:
-      - 5432
-    volumes:
-      - ./init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
-      - ../db/:/mnt/db
-    environment:
-      POSTGRES_PASSWORD: password
-
   keycloak:
     build:
       context: .
@@ -16,6 +6,7 @@ services:
         KEYCLOAK_THEME_GIT_REF: ${KEYCLOAK_THEME_GIT_REF:-main}
     command:
       - "start-dev"
+      - "--import-realm"
       - "--hostname=https://keycloak.odl.local"
       - "--http-enabled=true"
       - "--features=preview"
@@ -26,9 +17,14 @@ services:
       - "--proxy-headers=xforwarded"
       # - --log-level=DEBUG,de.captaingoldfish:TRACE
       # - --spi-realm-restapi-extension-scim-repair-database=true
+    hostname: keycloak.internal.odl.local
+    depends_on:
+      ol-db:
+        condition: service_healthy
+
     environment:
       KC_DB: postgres
-      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_HOST: ol-db
       KC_DB_URL_PORT: 5432
       KC_DB_URL_DATABASE: keycloak
       KC_DB_USERNAME: postgres
@@ -37,9 +33,10 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
     env_file:
-      - path: ./env/keycloak.local.env
+      - path: ../env/keycloak.local.env
         required: false
     volumes:
+      - ./realms:/opt/keycloak/data/import
       - ../repos/ol-keycloak/ol-keycloak/oltheme/target/keycloak-theme-ol-1.0-SNAPSHOT.jar:/opt/keycloak/providers/keycloak-theme-ol-1.0-SNAPSHOT.jar
       - ../repos/ol-keycloak/ol-keycloak/ol-spi/target/ol-spi-1.1-SNAPSHOT.jar:/opt/keycloak/providers/ol-spi-1.1-SNAPSHOT.jar
     ports:

@@ -1,5 +1,6 @@
 include: 
   - apisix/docker-compose.yml
+  - db/docker-compose.yml
   - keycloak/docker-compose.yml
   - tools/docker-compose.yml
 

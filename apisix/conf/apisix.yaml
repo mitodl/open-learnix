@@ -3,11 +3,26 @@ ssls:
     key: ${{OL_SSL_KEY}}
     snis: 
       - "api.learn.odl.local"
+      - "learn.odl.local"
+      - "keycloak.odl.local"
+      - "mail.odl.local"
 
 upstreams:
+  - id: keycloak
+    nodes:
+      "keycloak.internal.odl.local:8080": 1
+    type: roundrobin
   - id: mit-learn-nginx
     nodes:
       "mit-learn-nginx.internal.odl.local:8063": 1
+    type: roundrobin
+  - id: mit-learn-nextjs
+    nodes:
+      "mit-learn-nextjs.internal.odl.local:8062": 1
+    type: roundrobin
+  - id: mail
+    nodes:
+      "mail.internal.odl.local:8025": 1
     type: roundrobin
 
 routes:
@@ -41,15 +56,21 @@ routes:
           set:
             Referrer-Policy: "origin"
     uri: "*"
+    hosts:
+      - "api.learn.odl.local"
+
   - id: 2
     name: "logout-redirect"
     desc: "Strip trailing slash from logout redirect."
     priority: 10
     upstream_id: mit-learn-nginx
     uri: "/logout/oidc/*"
+    hosts:
+      - "api.learn.odl.local"
     plugins:
       redirect:
         uri: "/logout/oidc"
+
   - id: 3
     name: "reqauth"
     desc: "Routes that require authentication."
@@ -82,4 +103,27 @@ routes:
     uris:
       - "/admin/login/*"
       - "/login/*"
+    hosts:
+      - "api.learn.odl.local"
+
+  - id: 4
+    name: "keycloak"
+    upstream_id: keycloak
+    uri: "*"
+    hosts:
+      - "keycloak.odl.local"
+
+  - id: 5
+    name: "mit-learn-nextjs"
+    upstream_id: mit-learn-nextjs
+    uri: "*"
+    hosts:
+      - "learn.odl.local"
+
+  - id: 6
+    name: "mail"
+    upstream_id: mail
+    uri: "*"
+    hosts:
+      - "mail.odl.local"
 #END

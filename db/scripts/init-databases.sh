@@ -16,7 +16,7 @@ function create_user_and_db() {
 
         RAISE NOTICE 'Role "${db_user}" already exists. Skipping.';
      ELSE
-        CREATE ROLE my_user LOGIN PASSWORD '${db_password}';
+        CREATE ROLE ${db_user} LOGIN PASSWORD '${db_password}';
      END IF;
   END
   \$do\$;
@@ -28,5 +28,19 @@ function create_user_and_db() {
 EOSQL
 }
 
+bin_path="$(dirname "${BASH_SOURCE[0]}")"
 
-create_user_and_db "keycloak" "password" "keycloak"
+# load array into a bash array
+# output each entry as a single line json
+readarray databases < <(yq -o=j -I=0 '.databases[]' "$bin_path/databases.yml" )
+
+for database in "${databases[@]}"; do
+    # parse the individual db
+    db_password=$(echo "$database" | yq '.password' -)
+    db_user=$(echo "$database" | yq '.user' -)
+    db_name=$(echo "$database" | yq '.name' -)
+
+    create_user_and_db "$db_user" "$db_password" "$db_name"
+done
+
+exit 0

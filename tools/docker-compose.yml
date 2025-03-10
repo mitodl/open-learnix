@@ -9,7 +9,9 @@ services:
     ports:
       - 8025
       - 1025
-    hostname: mail.odl.local
+    hostname: mail.internal.odl.local
+    networks:
+      - ol-network
     environment:
       MP_MAX_MESSAGES: 5000
       MP_DATA_FILE: /data/mailpit.db
@@ -17,17 +19,21 @@ services:
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
   webhook-tester:
-    image: tarampampam/webhook-tester
-    command: --log-json serve --port 8180 --storage-driver redis --pubsub-driver redis --redis-dsn redis://redis:6379/0
+    image: tarampampam/webhook-tester:2.2
+    command: serve --port 8180 --log-format json --storage-driver redis --pubsub-driver redis --redis-dsn redis://redis:6379/0
     ports: 
       - '8180/tcp'
     depends_on:
       redis: {condition: service_healthy}
+    networks:
+      - ol-network
 
   redis:
     image: redis:7-alpine
     volumes: [redis-data:/data:rw]
     ports: ['6379/tcp']
+    networks:
+      - ol-network
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 1s

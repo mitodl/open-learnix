@@ -1,0 +1,21 @@
+services:
+  ol-db:
+    build:
+      context: .
+    ports:
+      - 5432
+    volumes:
+      - ./scripts/:/mnt/db/scripts
+      - ./backups/:/mnt/db/backups
+    post_start:
+      - command: /mnt/db/scripts/init-databases.sh
+        user: postgres
+    healthcheck:
+      test: ["CMD", "/mnt/db/scripts/healthcheck.sh"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      - ol-network
