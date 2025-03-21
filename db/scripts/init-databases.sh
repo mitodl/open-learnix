@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 function create_user_and_db() {
   local db_user="$1"
@@ -29,6 +28,13 @@ EOSQL
 }
 
 bin_path="$(dirname "${BASH_SOURCE[0]}")"
+
+until pg_isready
+do
+  sleep 0.2
+done
+
+set -e
 
 # load array into a bash array
 # output each entry as a single line json

@@ -2,18 +2,12 @@ services:
   api-gateway:
     build:
       context: .
-    environment:
-      - APISIX_PORT=${APISIX_PORT:-443}
-      - APISIX_SESSION_SECRET_KEY=${APISIX_SESSION_SECRET_KEY:-something_at_least_16_characters}
-      - APISIX_LOGOUT_URL=${APISIX_LOGOUT_URL:-https://learn.odl.local/}
-      # keycloak auth variables
-      - KEYCLOAK_REALM_NAME=${KEYCLOAK_REALM_NAME:-ol-local}
-      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID:-apisix}
-      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-HckCZXToXfaetbBx0Fo3xbjnC468oMi4}
-      - KEYCLOAK_DISCOVERY_URL=${KEYCLOAK_DISCOVERY_URL:-http://keycloak.internal.odl.local:8080/realms/ol-local/.well-known/openid-configuration}
-      - KEYCLOAK_SCOPES=${KEYCLOAK_SCOPES:-openid profile ol-profile}
     ports:
       - ${APISIX_PORT:-443}:${APISIX_PORT:-443}
+    env_file:
+      - path: ../env/apisix.env
+      - path: ../env/apisix.local.env
+        required: false
     volumes:
       - ./conf/apisix.yaml:/usr/local/apisix/conf/apisix.yaml
       - ./conf/config.yaml:/usr/local/apisix/conf/config.yaml

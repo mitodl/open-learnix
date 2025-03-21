@@ -1,0 +1,41 @@
+services:
+  nginx:
+    networks:
+      - default
+      - ol-network
+    hostname: mitx-online-nginx.internal.odl.local
+  web:
+    networks:
+      - default
+      - ol-network
+    environment:
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+    volumes:
+      - ${OL_ROOT}/certs/odl.local.pem:/etc/ssl/certs/odl.local.pem
+      - ${HOME}/.local/share/mkcert/rootCA.pem:/etc/ssl/certs/mkcert-rootCA.pem
+
+  celery:
+    networks:
+      - default
+      - ol-network
+    environment:
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+    volumes:
+      - ${OL_ROOT}/certs/odl.local.crt:/etc/ssl/certs/odl.local.crt
+      - ${HOME}/.local/share/mkcert/rootCA.pem:/etc/ssl/certs/mkcert-rootCA.pem
+
+  watch:
+    networks:
+      - default
+      - ol-network
+    hostname: mitx-online-nextjs.internal.odl.local
+
+  locust-worker:
+    networks:
+      - default
+      - ol-network
+
+networks:
+  default:
+  ol-network:
+    external: true
