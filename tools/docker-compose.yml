@@ -2,7 +2,6 @@ services:
 
   mailpit:
     image: axllent/mailpit
-    container_name: mailpit
     restart: always
     volumes:
       - ./data:/data
@@ -10,8 +9,6 @@ services:
       - 8025
       - 1025
     hostname: mail.internal.odl.local
-    networks:
-      - ol-network
     environment:
       MP_MAX_MESSAGES: 5000
       MP_DATA_FILE: /data/mailpit.db
@@ -25,15 +22,11 @@ services:
       - '8180/tcp'
     depends_on:
       redis: {condition: service_healthy}
-    networks:
-      - ol-network
 
   redis:
     image: redis:7-alpine
     volumes: [redis-data:/data:rw]
     ports: ['6379/tcp']
-    networks:
-      - ol-network
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 1s

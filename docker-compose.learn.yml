@@ -1,42 +1,38 @@
 services:
   nginx:
     networks:
-      - default
-      - ol-network
-    hostname: mit-learn-nginx.internal.odl.local
+      default:
+      ol-network:
+        aliases:
+          - mit-learn-nginx.internal.odl.local
+
   web:
-    networks:
-      - default
-      - ol-network
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     volumes:
       - ${OL_ROOT}/certs/odl.local.pem:/etc/ssl/certs/odl.local.pem
       - ${HOME}/.local/share/mkcert/rootCA.pem:/etc/ssl/certs/mkcert-rootCA.pem
+    networks:
+      default:
+      ol-network:
 
   celery:
-    networks:
-      - default
-      - ol-network
-    extra_hosts:
-      # go through traefik
-      - keycloak.odl.local:172.44.0.200
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     volumes:
       - ${OL_ROOT}/certs/odl.local.crt:/etc/ssl/certs/odl.local.crt
       - ${HOME}/.local/share/mkcert/rootCA.pem:/etc/ssl/certs/mkcert-rootCA.pem
+    networks:
+      default:
+      ol-network:
+    mem_limit: 4G
 
   watch:
     networks:
-      - default
-      - ol-network
-    hostname: mit-learn-nextjs.internal.odl.local
-
-  locust-worker:
-    networks:
-      - default
-      - ol-network
+      default:
+      ol-network:
+        aliases:
+          - mit-learn-nextjs.internal.odl.local
 
 networks:
   default:

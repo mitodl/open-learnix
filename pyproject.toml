@@ -1,0 +1,13 @@
+[project]
+name = "ol-dev"
+version = "0.1.0"
+description = "Open Learning local development tool"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "tutor[full]>=19.0.2",
+]
+
+
+[tool.uv.sources]
+tutor = { git = "https://github.com/mitodl/tutor", branch = "nl/docker-compose-prod-override" }

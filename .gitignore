@@ -12,3 +12,5 @@ env/*
 !env/*.example.env
 
 certs/
+
+.python-version

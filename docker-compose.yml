@@ -2,17 +2,33 @@ include:
   - apisix/docker-compose.yml
   - db/docker-compose.yml
   - keycloak/docker-compose.yml
-  - tools/docker-compose.yml
+  - tools/docker-compose.yml 
+
+services:
+  ldap:
+    image: bitnami/openldap:latest
+    ports:
+      - '1389:1389'
+      - '1636:1636'
+    environment:
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: adminpassword
+      LDAP_USERS: user01,user02
+      LDAP_PASSWORDS: password1,password2
+      LDAP_ROOT: dc=odl,dc=local
+    volumes:
+      - 'openldap_data:/bitnami/openldap'
 
 networks:
-  ol-network:
+  default:
     name: ol-network
     ipam:
       driver: default
       config:
         - subnet: "172.44.0.0/16"
           gateway: "172.44.0.1"
-
+volumes:
+  openldap_data:
 
 secrets:
   ol-ssl-cert:

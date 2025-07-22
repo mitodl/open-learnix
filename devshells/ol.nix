@@ -32,6 +32,7 @@
           PRE_COMMIT_HOME = "${devenvRoot}/.cache/pre-commit";
           PIP_NO_BINARY = "ruff";
           OL_ROOT = "${devenvRoot}";
+          SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; # fix python urllib cert resolution
         };
 
         pre-commit = {
@@ -57,33 +58,41 @@
           };
         };
 
+        languages.python = {
+          enable = true;
+          uv.enable = true;
+          uv.sync.enable = true;
+        };
+
         scripts = {
           ol-dc.exec = ''
             ${builtins.readFile ../bin/ol-stdlib.sh}
 
             ol_dc_cmd "${devenvRoot}" "$@"
           '';
+          tutor.exec = ''uv run tutor "$@"'';
         };
 
         enterShell = let
-            certsPath = "${devenvRoot}/certs";
-            certFile = "${certsPath}/odl.local.crt";
-            keyFile = "${certsPath}/odl.local.key";
-            pemFile = "${certsPath}/odl.local.pem";
+          certsPath = "${devenvRoot}/certs";
+          certFile = "${certsPath}/odl.local.crt";
+          keyFile = "${certsPath}/odl.local.key";
+          pemFile = "${certsPath}/odl.local.pem";
         in ''
           mkcert \
             --cert-file ${certFile} \
             --key-file ${keyFile} \
             "odl.local" \
             "*.odl.local" \
-            "*.learn.odl.local" \ 
+            "*.learn.odl.local" \
+            "*.mitxonline.odl.local" \
+            "*.openedx.odl.local" \
             "*.internal.odl.local"
 
             openssl x509 -in ${certFile} -out ${pemFile} -outform PEM
         '';
       };
     };
-
 
     treefmt = {
       projectRootFile = "flake.nix";

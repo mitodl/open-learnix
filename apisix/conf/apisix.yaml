@@ -1,17 +1,3 @@
-x-openid-connect-defaults: &openid-connect-defaults
-  client_id: ${{KEYCLOAK_CLIENT_ID}}
-  client_secret: ${{KEYCLOAK_CLIENT_SECRET}}
-  discovery: ${{KEYCLOAK_DISCOVERY_URL}}
-  realm: ${{KEYCLOAK_REALM_NAME}}
-  scope: ${{KEYCLOAK_SCOPES}}
-  bearer_only: false
-  introspection_endpoint_auth_method: "client_secret_post"
-  ssl_verify: false
-  session:
-    secret: ${{APISIX_SESSION_SECRET_KEY}}
-  logout_path: "/logout"
-  post_logout_redirect_uri: ${{APISIX_LOGOUT_URL}}
-
 x-cors-defaults: &cors-defaults
   allow_origins: "**"
   allow_methods: "**"
@@ -23,7 +9,6 @@ x-response-rewrite-defaults: &response-rewrite-defaults
     set:
       Referrer-Policy: "origin"
 
-
 ssls:
   - cert: ${{OL_SSL_CERT}}
     key: ${{OL_SSL_KEY}}
@@ -32,12 +17,25 @@ ssls:
       - "learn.odl.local"
       - "keycloak.odl.local"
       - "mail.odl.local"
+      - "mitxonline.odl.local"
+      - "refine.mitxonline.odl.local"
+      - "watch.mitxonline.odl.local"
+      - "openedx.odl.local"
+      - "preview.openedx.odl.local"
+      - "studio.openedx.odl.local"
+      - "meilisearch.openedx.odl.local"
+      - "apps.openedx.odl.local"
 
 upstreams:
+  - id: mail
+    nodes:
+      "mail.internal.odl.local:8025": 1
+    type: roundrobin
   - id: keycloak
     nodes:
       "keycloak.internal.odl.local:8080": 1
     type: roundrobin
+
   - id: mit-learn-nginx
     nodes:
       "mit-learn-nginx.internal.odl.local:8063": 1
@@ -46,16 +44,43 @@ upstreams:
     nodes:
       "mit-learn-nextjs.internal.odl.local:8062": 1
     type: roundrobin
-  - id: mail
+
+  - id: mitxonline-varnish
     nodes:
-      "mail.internal.odl.local:8025": 1
+      "mitxonline-varnish.internal.odl.local:80": 1
+    type: roundrobin
+
+  - id: mitxonline-refine
+    nodes:
+      "mitxonline-refine.internal.odl.local:8016": 1
+    type: roundrobin
+
+  - id: mitxonline-watch
+    nodes:
+      "mitxonline-watch.internal.odl.local:8012": 1
+    type: roundrobin
+
+  - id: openedx-cms
+    nodes:
+      "cms.openedx.internal.odl.local:8000": 1
+    type: roundrobin
+
+  - id: openedx-lms
+    nodes:
+      "lms.openedx.internal.odl.local:8000": 1
+    type: roundrobin
+
+  - id: openedx-meilisearch
+    nodes:
+      "meilisearch.openedx.internal.odl.local:7700": 1
     type: roundrobin
 
 routes:
-  - id: 1
-    name: "passauth"
+
+  - id: learn-pass-auth
+    name: learn-pass-auth
     desc: "Wildcard route that can use auth but doesn't require it."
-    priority: 0
+    priority: 5
     upstream_id: mit-learn-nginx
     plugins:
       openid-connect:
@@ -68,9 +93,9 @@ routes:
         introspection_endpoint_auth_method: "client_secret_post"
         ssl_verify: false
         session:
-          secret: ${{APISIX_SESSION_SECRET_KEY}}
+          secret: learn-apisix-secret
         logout_path: "/logout/oidc"
-        post_logout_redirect_uri: ${{APISIX_LOGOUT_URL}}
+        post_logout_redirect_uri: https://api.learn.odl.local/logout
         unauth_action: "pass"
       cors:
         allow_origins: "**"
@@ -85,8 +110,8 @@ routes:
     hosts:
       - "api.learn.odl.local"
 
-  - id: 2
-    name: "reqauth"
+  - id: learn-require-auth
+    name: learn-require-auth
     desc: "Routes that require authentication."
     priority: 10
     upstream_id: mit-learn-nginx
@@ -101,9 +126,9 @@ routes:
         introspection_endpoint_auth_method: "client_secret_post"
         ssl_verify: false
         session:
-          secret: ${{APISIX_SESSION_SECRET_KEY}}
+          secret: learn-apisix-secret
         logout_path: "/logout/oidc"
-        post_logout_redirect_uri: ${{APISIX_LOGOUT_URL}}
+        post_logout_redirect_uri: https://api.learn.odl.local/
         unauth_action: "auth"
       cors:
         allow_origins: "**"
@@ -120,24 +145,141 @@ routes:
     hosts:
       - "api.learn.odl.local"
 
-  - id: 3
-    name: "keycloak"
+  - id: keycloak
+    name: keycloak
     upstream_id: keycloak
     uri: "*"
+    plugins:
+      response-rewrite:
+        headers:
+          set:
+            Content-Security-Policy: frame-ancestors 'self' https://openedx.odl.local
     hosts:
       - "keycloak.odl.local"
 
-  - id: 4
-    name: "mit-learn-nextjs"
+  - id: mit-learn-nextjs
+    name: mit-learn-nextjs
     upstream_id: mit-learn-nextjs
     uri: "*"
     hosts:
       - "learn.odl.local"
 
-  - id: 5
-    name: "mail"
+  - id: mail
+    name: mail
     upstream_id: mail
     uri: "*"
     hosts:
       - "mail.odl.local"
+
+# =============================================
+# MITx Online
+# =============================================
+  - id: mitxonline-pass-auth
+    name: mitxonline-pass-auth
+    desc: "Wildcard route that can use auth but doesn't require it."
+    priority: 5
+    upstream_id: mitxonline-varnish
+    plugins:
+      openid-connect:
+        client_id: ${{KEYCLOAK_CLIENT_ID}}
+        client_secret: ${{KEYCLOAK_CLIENT_SECRET}}
+        discovery: ${{KEYCLOAK_DISCOVERY_URL}}
+        realm: ${{KEYCLOAK_REALM_NAME}}
+        scope: ${{KEYCLOAK_SCOPES}}
+        bearer_only: false
+        introspection_endpoint_auth_method: "client_secret_post"
+        ssl_verify: false
+        session:
+          secret: mitxonline-apisix-secret
+        logout_path: "/logout/oidc"
+        post_logout_redirect_uri: https://mitxonline.odl.local/
+        unauth_action: "pass"
+      cors:
+        allow_origins: "**"
+        allow_methods: "**"
+        allow_headers: "**"
+        allow_credential: true
+      response-rewrite:
+        headers:
+          set:
+            Referrer-Policy: "origin"
+            Content-Security-Policy: frame-ancestors 'self' https://openedx.odl.local
+    uri: "/*"
+    hosts:
+      - "mitxonline.odl.local"
+
+  - id: mitxonline-require-auth
+    name: mitxonline-require-auth
+    desc: "Routes that require authentication."
+    priority: 10
+    upstream_id: mitxonline-varnish
+    plugins:
+      openid-connect:
+        client_id: ${{KEYCLOAK_CLIENT_ID}}
+        client_secret: ${{KEYCLOAK_CLIENT_SECRET}}
+        discovery: ${{KEYCLOAK_DISCOVERY_URL}}
+        realm: ${{KEYCLOAK_REALM_NAME}}
+        scope: ${{KEYCLOAK_SCOPES}}
+        bearer_only: false
+        introspection_endpoint_auth_method: "client_secret_post"
+        ssl_verify: false
+        session:
+          secret: mitxonline-apisix-secret
+        logout_path: "/logout/oidc"
+        post_logout_redirect_uri: https://mitxonline.odl.local/
+        unauth_action: "auth"
+      cors:
+        allow_origins: "**"
+        allow_methods: "**"
+        allow_headers: "**"
+        allow_credential: true
+      response-rewrite:
+        headers:
+          set:
+            Referrer-Policy: "origin"
+            Content-Security-Policy: frame-ancestors 'self' https://openedx.odl.local
+    uris:
+      # - "/admin/login*"
+      - "/login*"
+    hosts:
+      - "mitxonline.odl.local"
+
+  - id: mitxonline-refine
+    name: mitxonline-watch
+    upstream_id: mitxonline-watch
+    uri: "*"
+    hosts:
+      - "watch.mitxonline.odl.local"
+
+  - id: mitxonline-refine
+    name: mitxonline-refine
+    upstream_id: mitxonline-refine
+    uri: "*"
+    hosts:
+      - "staff.mitxonline.odl.local"
+
+# =============================================
+# OpenedX
+# =============================================
+  - id: openedx-lms
+    name: openedx-lms
+    upstream_id: openedx-lms
+    uri: "*"
+    hosts:
+      - "openedx.odl.local"
+
+  - id: openedx-cms
+    name: openedx-cms
+    upstream_id: openedx-cms
+    uri: "*"
+    hosts:
+      - "studio.openedx.odl.local"
+      - "preview.openedx.odl.local"
+
+  - id: openedx-meilisearch
+    name: openedx-meilisearch
+    upstream_id: openedx-meilisearch
+    uri: "*"
+    hosts:
+      - "meilisearch.openedx.odl.local"
 #END

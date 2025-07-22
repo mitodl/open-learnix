@@ -17,5 +17,3 @@ services:
       retries: 10
     environment:
       POSTGRES_PASSWORD: password
-    networks:
-      - ol-network

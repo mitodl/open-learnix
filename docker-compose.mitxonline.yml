@@ -1,39 +1,49 @@
 services:
+
   nginx:
     networks:
-      - default
-      - ol-network
-    hostname: mitx-online-nginx.internal.odl.local
-  web:
+      default:
+        aliases: !reset []
+  varnish:
     networks:
-      - default
-      - ol-network
+      default:
+      ol-network:
+        aliases: 
+          - mitxonline-varnish.internal.odl.local
+
+  web:
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     volumes:
       - ${OL_ROOT}/certs/odl.local.pem:/etc/ssl/certs/odl.local.pem
       - ${HOME}/.local/share/mkcert/rootCA.pem:/etc/ssl/certs/mkcert-rootCA.pem
+    networks:
+      default:
+      ol-network:
 
   celery:
-    networks:
-      - default
-      - ol-network
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     volumes:
       - ${OL_ROOT}/certs/odl.local.crt:/etc/ssl/certs/odl.local.crt
       - ${HOME}/.local/share/mkcert/rootCA.pem:/etc/ssl/certs/mkcert-rootCA.pem
+    networks:
+      default:
+      ol-network:
 
   watch:
     networks:
-      - default
-      - ol-network
-    hostname: mitx-online-nextjs.internal.odl.local
+      default:
+      ol-network:
+        aliases: 
+          - mitxonline-watch.internal.odl.local
 
-  locust-worker:
+  refine:
     networks:
-      - default
-      - ol-network
+      default:
+      ol-network:
+        aliases: 
+          - mitxonline-refine.internal.odl.local
 
 networks:
   default:

@@ -15,12 +15,16 @@ services:
       - "--spi-theme-cache-templates=false"
       - "--spi-login-provider=ol-freemarker"
       - "--proxy-headers=xforwarded"
+      # allows it to be accessed via internal dns
+      - "--hostname-backchannel-dynamic=true"
       # - --log-level=DEBUG,de.captaingoldfish:TRACE
       # - --spi-realm-restapi-extension-scim-repair-database=true
     hostname: keycloak.internal.odl.local
     depends_on:
       ol-db:
         condition: service_healthy
+      ldap:
+        condition: service_started
 
     environment:
       KC_DB: postgres
@@ -42,6 +46,3 @@ services:
     ports:
       - "8080"
       - "8443"
-    networks:
-      ol-network:
-        ipv4_address: 172.44.1.10
