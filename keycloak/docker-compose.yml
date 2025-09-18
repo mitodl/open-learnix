@@ -17,6 +17,7 @@ services:
       - "--proxy-headers=xforwarded"
       # allows it to be accessed via internal dns
       - "--hostname-backchannel-dynamic=true"
+      - "--truststore-paths=/run/secrets/odl.local.pem"
       # - --log-level=DEBUG,de.captaingoldfish:TRACE
       # - --spi-realm-restapi-extension-scim-repair-database=true
     hostname: keycloak.internal.odl.local
@@ -46,3 +47,5 @@ services:
     ports:
       - "8080"
       - "8443"
+    secrets:
+      - odl.local.pem

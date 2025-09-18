@@ -13,11 +13,9 @@ services:
       - ./conf/apisix.yaml:/usr/local/apisix/conf/apisix.yaml
       - ./conf/config.yaml:/usr/local/apisix/conf/config.yaml
       - ./conf/debug.yaml:/usr/local/apisix/conf/debug.yaml
-      - ../cert/odl.local.crt:/usr/local/apisix/conf/cert/odl.local.crt
-      - ../cert/odl.local.key:/usr/local/apisix/conf/cert/odl.local.key
     secrets:
-      - ol-ssl-cert
-      - ol-ssl-key
+      - odl.local.crt
+      - odl.local.key
     networks:
       default:
         aliases:

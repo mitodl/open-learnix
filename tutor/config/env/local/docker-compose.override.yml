@@ -11,12 +11,12 @@ services:
       ol-network:
         aliases:
           - lms.openedx.internal.odl.local
-  mfe:
-    networks:
-      default:
-      ol-network:
-        aliases:
-          - mfe.openedx.internal.odl.local
+  # mfe:
+  #   networks:
+  #     default:
+  #     ol-network:
+  #       aliases:
+  #         - mfe.openedx.internal.odl.local
 
 networks:
   default:

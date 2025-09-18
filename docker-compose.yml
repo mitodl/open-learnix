@@ -31,7 +31,9 @@ volumes:
   openldap_data:
 
 secrets:
-  ol-ssl-cert:
+  odl.local.crt:
     file: ./certs/odl.local.crt
-  ol-ssl-key:
+  odl.local.key:
     file: ./certs/odl.local.key
+  odl.local.pem:
+    file: ./certs/odl.local.pem

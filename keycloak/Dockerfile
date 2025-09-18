@@ -30,4 +30,3 @@ ADD ./providers/*.jar /opt/keycloak/providers/
 COPY --from=build-mvn /src/ol-keycloak/ol-keycloak/oltheme/target/*.jar /opt/keycloak/providers/
 COPY --from=build-mvn /src/ol-keycloak/ol-keycloak/ol-spi/target/*.jar /opt/keycloak/providers/
 
-

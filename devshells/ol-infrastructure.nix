@@ -10,10 +10,8 @@
       languages.python = {
         enable = true;
         package = pkgs."python${pyVersion}";
-        poetry = {
+        uv = {
           enable = true;
-          activate.enable = true;
-          install.enable = true;
         };
       };
     };
