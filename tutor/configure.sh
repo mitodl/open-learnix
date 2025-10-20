@@ -20,6 +20,7 @@ tutor config save --set PREVIEW_LMD_HOST=preview.openedx.odl.local
 tutor config save --set CMS_HOST=studio.openedx.odl.local
 tutor config save --set MFE_HOST=apps.openedx.odl.local
 tutor config save --set ENABLE_HTTPS=true 
+tutor config save --set ENABLE_UNICODE_USERNAME=true
 
 tutor config save --append OPENEDX_EXTRA_PIP_REQUIREMENTS=ol-social-auth
 tutor config save --append OPENEDX_EXTRA_PIP_REQUIREMENTS=openedx-companion-auth

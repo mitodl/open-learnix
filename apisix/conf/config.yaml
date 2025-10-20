@@ -8,6 +8,7 @@ apisix:
       - port: 443
 
 nginx_config:
+  error_log_level: debug
   http_configuration_snippet: |
     large_client_header_buffers 4 8k;
 

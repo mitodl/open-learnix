@@ -7,7 +7,3 @@ requires-python = ">=3.13"
 dependencies = [
     "tutor[full]>=19.0.2",
 ]
-
-
-[tool.uv.sources]
-tutor = { git = "https://github.com/mitodl/tutor", branch = "nl/docker-compose-prod-override" }
