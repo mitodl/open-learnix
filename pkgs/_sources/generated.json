@@ -1,0 +1,23 @@
+{
+    "uv": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "uv",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "astral-sh",
+            "repo": "uv",
+            "rev": "0.9.6",
+            "sha256": "sha256-pr93GmvFx2DYt8/LzDSlllwpQ6XZuW7eMWNyEGwbUKg=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "0.9.6"
+    }
+}

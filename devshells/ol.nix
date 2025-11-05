@@ -4,6 +4,7 @@
     system,
     pkgs,
     pkgs-unstable,
+    pkgs-local,
     ...
   }: let
     devenvRoot = config.devenv.shells.default.env.DEVENV_ROOT;
@@ -14,6 +15,7 @@
           pkgs.git
           pkgs.pre-commit
           pkgs.nodejs
+          pkgs.nvfetcher
           pkgs.python312
           pkgs.poetry
           pkgs.gcc
@@ -35,7 +37,7 @@
           SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; # fix python urllib cert resolution
         };
 
-        pre-commit = {
+        git-hooks = {
           hooks = {
             # actionlint.enable = true;
             # treefmt = {
@@ -60,8 +62,12 @@
 
         languages.python = {
           enable = true;
-          uv.enable = true;
-          uv.sync.enable = true;
+          uv = {
+            enable = true;
+            package = pkgs-unstable.uv;
+            # package = pkgs-local.uv;
+            # sync.enable = true;
+          };
         };
 
         scripts = {

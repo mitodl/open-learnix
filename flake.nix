@@ -18,7 +18,6 @@
   };
 
   outputs = inputs @ {
-    self,
     flake-parts,
     systems,
     ...
@@ -27,13 +26,14 @@
       systems = import systems;
 
       perSystem = {
-        config,
         system,
+        pkgs,
         ...
       }: {
         _module.args = {
           pkgs = import inputs.nixpkgs {inherit system;};
           pkgs-unstable = import inputs.nixpkgs-unstable {inherit system;};
+          pkgs-local = import ./pkgs { inherit pkgs; };
         };
       };
 
