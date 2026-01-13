@@ -191,9 +191,6 @@ routes:
         realm: ${{KEYCLOAK_REALM_NAME}}
         scope: ${{KEYCLOAK_SCOPES}}
         bearer_only: false
-        introspection_endpoint: http://keycloak.internal.odl.local:8080/realms/ol-local/protocol/openid-connect/token/inspect
-        introspection_endpoint_auth_method: "client_secret_post"
-        introspection_interval: 5
         ssl_verify: false
         session:
           secret: local-apisix-secret
@@ -229,9 +226,6 @@ routes:
         realm: ${{KEYCLOAK_REALM_NAME}}
         scope: ${{KEYCLOAK_SCOPES}}
         bearer_only: false
-        introspection_endpoint: http://keycloak.internal.odl.local:8080/realms/ol-local/protocol/openid-connect/token/inspect
-        introspection_endpoint_auth_method: "client_secret_post"
-        introspection_interval: 5
         ssl_verify: false
         session:
           secret: local-apisix-secret

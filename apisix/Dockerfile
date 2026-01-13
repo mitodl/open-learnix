@@ -1,4 +1,4 @@
-FROM apache/apisix:3.13.0-debian
+FROM apache/apisix:3.14.0-debian
 
 ADD docker-entrypoint-extended.sh /docker-entrypoint-extended.sh
 

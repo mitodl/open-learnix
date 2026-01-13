@@ -62,9 +62,10 @@
 
         languages.python = {
           enable = true;
+          package = pkgs.python313;
           uv = {
             enable = true;
-            package = pkgs-unstable.uv;
+            # package = pkgs-unstable.uv;
             # package = pkgs-local.uv;
             # sync.enable = true;
           };

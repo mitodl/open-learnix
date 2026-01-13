@@ -22,7 +22,7 @@ http_filter:
 hook_conf:
   enable: false # Enable hook debug trace to log the target module function's input arguments or returned values.
   name: hook_phase # Name of module and function list.
-  log_level: warn # Severity level for input arguments and returned values in the error log.
+  log_level: debug # Severity level for input arguments and returned values in the error log.
   is_print_input_args: true # Print the input arguments.
   is_print_return_value: true # Print the return value.
 
