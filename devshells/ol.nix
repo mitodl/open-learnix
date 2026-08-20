@@ -1,94 +1,14 @@
 {
   perSystem = {
     config,
-    system,
+    lib,
     pkgs,
     pkgs-unstable,
-    pkgs-local,
     ...
-  }: let
-    devenvRoot = config.devenv.shells.default.env.DEVENV_ROOT;
-  in {
-    devenv.shells = {
-      default = {
-        packages = [
-          pkgs.git
-          pkgs.pre-commit
-          pkgs.nodejs
-          pkgs.nvfetcher
-          pkgs.python312
-          pkgs.poetry
-          pkgs.gcc
-          pkgs.detect-secrets
-          pkgs.mkcert
-          pkgs.openssl
-          pkgs.uv
-          # newer versions of ruff require a newer version of rustc/cargo to build
-          # these are only available in unstable at this time
-          pkgs-unstable.cargo
-          pkgs-unstable.rustc
-        ];
-
-        dotenv.disableHint = true;
-
-        env = {
-          PRE_COMMIT_HOME = "${devenvRoot}/.cache/pre-commit";
-          PIP_NO_BINARY = "ruff";
-          OL_ROOT = "${devenvRoot}";
-          SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; # fix python urllib cert resolution
-        };
-
-        git-hooks = {
-          hooks = {
-            # actionlint.enable = true;
-            # treefmt = {
-            #   enable = true;
-            #   package = config.treefmt.build.wrapper;
-            # };
-            # markdownlint.enable = true;
-            # yamllint.enable = true;
-          };
-
-          settings = {
-            markdownlint.config = {
-              # party like it's not 1999
-              MD013 = {
-                line_length = 120;
-                heading_line_length = 120;
-                code_block_line_length = 120;
-              };
-            };
-          };
-        };
-
-        scripts = {
-          ol-dc.exec = ''
-            ${builtins.readFile ../bin/ol-stdlib.sh}
-
-            ol_dc_cmd "${devenvRoot}" "$@"
-          '';
-          tutor.exec = ''uv run tutor "$@"'';
-        };
-
-        enterShell = let
-          certsPath = "${devenvRoot}/certs";
-          certFile = "${certsPath}/odl.local.crt";
-          keyFile = "${certsPath}/odl.local.key";
-          pemFile = "${certsPath}/odl.local.pem";
-        in ''
-          mkcert \
-            --cert-file ${certFile} \
-            --key-file ${keyFile} \
-            "odl.local" \
-            "*.odl.local" \
-            "*.learn.odl.local" \
-            "*.mitxonline.odl.local" \
-            "*.openedx.odl.local" \
-            "*.internal.odl.local"
-
-            openssl x509 -in ${certFile} -out ${pemFile} -outform PEM
-        '';
-      };
+  }: {
+    devenv.shells.default = import ../lib/ol-common.nix {
+      inherit lib pkgs pkgs-unstable;
+      devenvRoot = config.devenv.shells.default.env.DEVENV_ROOT;
     };
 
     treefmt = {
