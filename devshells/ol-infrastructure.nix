@@ -1,19 +1,16 @@
 {
-  perSystem = {pkgs, ...}: let
-    pyVersion = "313";
-  in {
+  perSystem = {pkgs, ...}:{
     devenv.shells.ol-infrastructure = {
-      packages = [
-        pkgs.awscli2
-        pkgs.kubectl
+      packages = with pkgs; [
+        awscli2
+        kubernetes-helm
+        k3d
+        kubectl
+        mkcert
+        pulumi-bin
+        tilt
+        uv
       ];
-      languages.python = {
-        enable = true;
-        package = pkgs."python${pyVersion}";
-        uv = {
-          enable = true;
-        };
-      };
     };
   };
 }

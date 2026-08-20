@@ -33,6 +33,10 @@ services:
       ol-network:
         aliases:
           - mit-learn-nextjs.internal.odl.local
+  locust-worker:
+    networks:
+      default:
+      ol-network:
 
 networks:
   default:

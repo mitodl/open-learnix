@@ -22,6 +22,7 @@
           pkgs.detect-secrets
           pkgs.mkcert
           pkgs.openssl
+          pkgs.uv
           # newer versions of ruff require a newer version of rustc/cargo to build
           # these are only available in unstable at this time
           pkgs-unstable.cargo
@@ -57,17 +58,6 @@
                 code_block_line_length = 120;
               };
             };
-          };
-        };
-
-        languages.python = {
-          enable = true;
-          package = pkgs.python313;
-          uv = {
-            enable = true;
-            # package = pkgs-unstable.uv;
-            # package = pkgs-local.uv;
-            # sync.enable = true;
           };
         };
 

@@ -5,6 +5,7 @@
 
       env = {
         COMPOSE_FILE = "docker-compose.yml:../../docker-compose.mitxonline.yml";
+        COMPOSE_PROFILES = "load-testing";
       };
 
       # enterShell = ''

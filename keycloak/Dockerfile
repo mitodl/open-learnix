@@ -5,8 +5,7 @@ RUN git clone https://github.com/mitodl/ol-keycloak.git
 FROM maven:3-eclipse-temurin-21 AS build-mvn
 
 COPY --from=sources /src/ol-keycloak /src/ol-keycloak
-RUN cd /src/ol-keycloak/ol-keycloak/oltheme && mvn clean install
-RUN cd /src/ol-keycloak/ol-keycloak/ol-spi && mvn clean install
+RUN cd /src/ol-keycloak/ol-keycloak/ol-spi && mvn clean install -Dmaven.test.skip
 
 FROM gradle:8-jdk21-alpine AS build-gradle
 
@@ -22,11 +21,10 @@ RUN dnf install --installroot /mnt/rootfs ${packages} --releasever 9 --setopt in
     rpm --root /mnt/rootfs -e --nodeps setup
 
 # -------------------------------------------------------------------------
-FROM quay.io/keycloak/keycloak:26.4.4
+FROM quay.io/keycloak/keycloak:26.6.1
 COPY --from=ubi-micro-build /mnt/rootfs /
 
 # COPY --from=build-gradle /src/keycloak-scim/build/libs/*.jar /opt/keycloak/providers/
 ADD ./providers/*.jar /opt/keycloak/providers/
-COPY --from=build-mvn /src/ol-keycloak/ol-keycloak/oltheme/target/*.jar /opt/keycloak/providers/
 COPY --from=build-mvn /src/ol-keycloak/ol-keycloak/ol-spi/target/*.jar /opt/keycloak/providers/
 

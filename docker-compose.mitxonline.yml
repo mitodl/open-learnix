@@ -47,6 +47,16 @@ services:
         aliases: 
           - mitxonline-refine.internal.odl.local
 
+  # locust:
+  #   networks:
+  #     default:
+  #     ol-network:
+  #
+  # locust-worker:
+  #   networks:
+  #     default:
+  #     ol-network:
+
 networks:
   default:
   ol-network:

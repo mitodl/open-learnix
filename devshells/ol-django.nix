@@ -9,14 +9,13 @@
         LD_LIBRARY_PATH = "{pkgs.xmlsec}/lib:$LD_LIBRARY_PATH";
         UV_PROJECT_ENVIRONMENT = lib.mkForce "./repos/ol-django/.venv/";
       };
-
-      languages.python = {
-        enable = true;
-        uv = {
-          enable = true;
-          package = pkgs.uv;
-        };
-      };
+      packages = with pkgs;[
+        python311
+        python312
+        python313
+        python314
+        uv
+      ];
 
       scripts = {
         pg-start.exec = "docker compose up -d";
