@@ -7,4 +7,6 @@ in {
 
     cargoHash = "";
   });
+
+  tutor = pkgs.callPackage ./tutor { inherit sources; };
 }

@@ -28,6 +28,7 @@
       perSystem = {
         system,
         pkgs,
+        pkgs-local,
         ...
       }: {
         _module.args = {
@@ -35,6 +36,8 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {inherit system;};
           pkgs-local = import ./pkgs { inherit pkgs; };
         };
+
+        packages.tutor = pkgs-local.tutor;
       };
 
       imports =

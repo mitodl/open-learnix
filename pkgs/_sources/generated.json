@@ -1,6 +1,231 @@
 {
+    "click": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "click",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-7VPJ2JkNg8Kifermjk7jN0c/YzDAQKMdQiXJV00WCWo=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/c/click/click-8.1.8.tar.gz"
+        },
+        "version": "8.1.8"
+    },
+    "tutor": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-EESytQFyCDXtzHhsasTb5hPwICtnn+1JoDhpRv+JP1k=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor/tutor-22.0.1.tar.gz"
+        },
+        "version": "22.0.1"
+    },
+    "tutor-android": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-android",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-VYrrjAimvn4oSG2qqtpz44PPOmRX/cBuONftQjsf7YU=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_android/tutor_android-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-cairn": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-cairn",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-D7cdg/fMSagsGOiecrRx8xn1dHm1XPypQUT5y8SWB0Y=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_cairn/tutor_cairn-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-credentials": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-credentials",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-jtITJpoM8zv/abF0ho+dYECTF7FEc9LvVgBokB03l2c=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_credentials/tutor_credentials-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-deck": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-deck",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-ATgvhoao1VgIbTqsbW1mfhq/aBEut3/r3Traefm/0hI=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_deck/tutor_deck-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-discovery": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-discovery",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-ynLuUi8AjGhMoN2/0Q2Pasirrsk81Vfa3+6jtdj9H/Y=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_discovery/tutor_discovery-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-forum": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-forum",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-v5IPaUzhiDnoKf05PjBWIcLX6iEFtom1e1GyCmtLqbg=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_forum/tutor_forum-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-indigo": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-indigo",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-T0sCJ1hG0oFvNltpc14HpjYcOmTka1A3gf/tQqh3Ei4=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_indigo/tutor_indigo-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-jupyter": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-jupyter",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-UeoJwMD1d69/pGfecIs50lQQ6Rs46hPiD36NjADsRSY=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_jupyter/tutor_jupyter-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-livedeps": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-livedeps",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-OT8a8df+01Ch8Avs6jpkEa9DbZvZmV0fngy/hpBUHao=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_livedeps/tutor_livedeps-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-mfe": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-mfe",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-paejRI/oreV5zYlujZsktJGxigWdrEehCtRXKn5wGB0=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_mfe/tutor_mfe-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-minio": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-minio",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-lUKTcDqwifoyAwU3IQs6+kNWfZovogTBQ4jFd+qzy0c=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_minio/tutor_minio-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-notes": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-notes",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-BBhPzedU6zxNseCTp501967qS4QhiLeEC4+8Wv1udgk=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_notes/tutor_notes-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
+    "tutor-xqueue": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "tutor-xqueue",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-mZNRdw4LjGIOioxWZX2yYdm6HOpWCpyH/dtpuDe70iI=",
+            "type": "url",
+            "url": "https://pypi.org/packages/source/t/tutor_xqueue/tutor_xqueue-22.0.0.tar.gz"
+        },
+        "version": "22.0.0"
+    },
     "uv": {
-        "cargoLocks": null,
+        "cargoLock": null,
         "date": null,
         "extract": null,
         "name": "uv",

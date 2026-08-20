@@ -4,11 +4,12 @@
     lib,
     pkgs,
     pkgs-unstable,
+    pkgs-local,
     ...
   }: {
     devenv.shells.ol-infrastructure = lib.mkMerge [
       (import ../lib/ol-common.nix {
-        inherit lib pkgs pkgs-unstable;
+        inherit lib pkgs pkgs-unstable pkgs-local;
         devenvRoot = config.devenv.shells.ol-infrastructure.env.DEVENV_ROOT;
         repoSubdir = "repos/ol-infrastructure";
       })

@@ -1,3 +1,71 @@
 [uv]
 src.github = "astral-sh/uv"
 fetch.github = "astral-sh/uv"
+
+# Compatibility pin, deliberately not tracking latest: tutor pins click<8.3.0, and
+# click-repl (a tutor-deck dependency) is broken on click>=8.2.0
+# <https://github.com/click-contrib/click-repl/issues/128>, which is why nixpkgs marks
+# click-repl broken against its own click 8.3.x. 8.1.8 is the newest release that
+# satisfies both. See pkgs/tutor/default.nix.
+[click]
+src.manual = "8.1.8"
+fetch.pypi = "click"
+
+# Open edX tutor and its full plugin set (the `tutor[full]` extra). Every one of
+# these is a hatchling project published to PyPI as an sdist; fetch.pypi needs the
+# sdist filename stem, which is underscored for the plugins.
+[tutor]
+src.pypi = "tutor"
+fetch.pypi = "tutor"
+
+[tutor-android]
+src.pypi = "tutor-android"
+fetch.pypi = "tutor_android"
+
+[tutor-cairn]
+src.pypi = "tutor-cairn"
+fetch.pypi = "tutor_cairn"
+
+[tutor-credentials]
+src.pypi = "tutor-credentials"
+fetch.pypi = "tutor_credentials"
+
+[tutor-deck]
+src.pypi = "tutor-deck"
+fetch.pypi = "tutor_deck"
+
+[tutor-discovery]
+src.pypi = "tutor-discovery"
+fetch.pypi = "tutor_discovery"
+
+[tutor-forum]
+src.pypi = "tutor-forum"
+fetch.pypi = "tutor_forum"
+
+[tutor-indigo]
+src.pypi = "tutor-indigo"
+fetch.pypi = "tutor_indigo"
+
+[tutor-jupyter]
+src.pypi = "tutor-jupyter"
+fetch.pypi = "tutor_jupyter"
+
+[tutor-livedeps]
+src.pypi = "tutor-livedeps"
+fetch.pypi = "tutor_livedeps"
+
+[tutor-mfe]
+src.pypi = "tutor-mfe"
+fetch.pypi = "tutor_mfe"
+
+[tutor-minio]
+src.pypi = "tutor-minio"
+fetch.pypi = "tutor_minio"
+
+[tutor-notes]
+src.pypi = "tutor-notes"
+fetch.pypi = "tutor_notes"
+
+[tutor-xqueue]
+src.pypi = "tutor-xqueue"
+fetch.pypi = "tutor_xqueue"

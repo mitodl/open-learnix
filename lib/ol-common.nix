@@ -10,6 +10,7 @@
   lib,
   pkgs,
   pkgs-unstable,
+  pkgs-local,
   # DEVENV_ROOT of the shell this is merged into. Under `--impure` devenv sets
   # it to the directory direnv loaded the flake from, i.e. the repo checkout.
   devenvRoot,
@@ -46,6 +47,7 @@ in {
     pkgs.mkcert
     pkgs.openssl
     pkgs.uv
+    pkgs-local.tutor
     # newer versions of ruff require a newer version of rustc/cargo to build
     # these are only available in unstable at this time
     pkgs-unstable.cargo
@@ -90,7 +92,6 @@ in {
 
       ol_dc_cmd "${olRoot}" "$@"
     '';
-    tutor.exec = ''uv run tutor "$@"'';
   };
 
   enterShell = ''
